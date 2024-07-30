@@ -14,6 +14,14 @@ class Piece(Enum):
     king = 0
 
 
+def in_bounds(x, y):
+    return 0 <= x < COLS and 0 <= y < ROWS
+
+
+def is_jump(start_x, end_x):
+    return abs(end_x - start_x) > 1
+
+
 class Board:
 
     def __init__(self):
@@ -38,11 +46,10 @@ class Board:
         end_y = move[3]
         player = move[4]
 
+        if is_jump(start_x, end_x):
+            self.remove_checker(int((start_x + end_x) / 2), int((start_y + end_y) / 2))  # remove piece
+
         self.remove_checker(start_x, start_y)
-
-        if abs(end_x - start_x) > 1:  # remove piece
-            self.remove_checker(int((start_x + end_x) / 2), int((start_y + end_y) / 2))
-
         new_checker = self.generate_checker(end_x, end_y, player)
         self.add_new_checker(new_checker)
 
@@ -53,7 +60,7 @@ class Board:
             return x, y, player, Piece.basic
 
     def add_new_checker(self, checker):
-        if checker[3] == Player.player1:  # should be a better way of doing this?
+        if checker[3] == Player.player1:
             self.player_one_pieces.append(checker)
         elif checker[3] == Player.player2:
             self.player_two_pieces.append(checker)
@@ -111,7 +118,7 @@ class Board:
         for i in range(len(x_change)):
             new_x = start_x + x_change[i]
             new_y = start_y + y_change[i]
-            if not self.in_bounds(new_x, new_y):
+            if not in_bounds(new_x, new_y):
                 continue
             checker = self.get_checker(new_x, new_y)
             if checker == -1:  # no checker exists at given position
@@ -119,14 +126,11 @@ class Board:
             elif checker[2] != player:
                 new_x += x_change[i]
                 new_y += y_change[i]
-                if not self.in_bounds(new_x, new_y):
+                if not in_bounds(new_x, new_y):
                     continue
                 if checker == -1:  # no checker exists at given position
                     moves.append((start_x, start_y, new_x, new_y, player))
         return moves
-
-    def in_bounds(self, x, y):
-        return 0 <= x < COLS and 0 <= y < ROWS
 
     def print_all_moves(self, player):
         if player == Player.player1:
@@ -156,4 +160,4 @@ while True:
     b.print_board()
     row = int(input("enter row: \n"))
     col = int(input("enter col: \n"))
-    print(b.get_checker(row, col))
+    print(b.get_checker(row, col))  # testing
