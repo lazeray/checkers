@@ -180,7 +180,6 @@ class Board:
 b = Board()
 while True:
     b.print_board()
-    # print(b.get_checker(row, col))  # testing
     b.print_all_moves(Player.PLAYER1)
     row = int(input("enter row: \n"))
     col = int(input("enter col: \n"))
