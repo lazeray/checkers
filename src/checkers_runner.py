@@ -8,9 +8,9 @@ curr_player = Board.Player.PLAYER1
 
 def AI_move(AI_player):
     moves = Checkers_AI.get_move(board, AI_player)
-    # print(moves)
+    print(moves)
     for move in moves:
-        print(move)
+        # print(move)
         board.move(*move) # returns if AI_move captures a piece
 
 def human_move(start_row, start_col, end_row, end_col, human_player):
@@ -26,7 +26,8 @@ while True:
         curr_player = human_player
     elif curr_player is human_player:
         print(board.get_all_moves(human_player))
-        # take inputs
+        
+        # FIXME
         start_row = int(input("Enter the start_row: "))
         start_col = int(input("Enter the start_col: "))
         end_row = int(input("Enter the end_row: "))
