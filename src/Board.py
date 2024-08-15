@@ -156,12 +156,8 @@ class Board:
             captured_checker_position = get_captured_checker_position(start_row, start_col, new_row, new_col)
             captured_checker = self.get_checker(*captured_checker_position)
             if checker == -1 and captured_checker != -1 and get_player_from_checker(captured_checker) != player:
-                # print("REACH!")
                 self.remove_checker(*captured_checker_position)
-                # print(self.get_jump_moves(self.generate_checker(new_row, new_col, player)))
-                # print("!!")
                 if self.get_jump_moves(self.generate_checker(new_row, new_col, player)) == []:
-                    # print("!!!!")
                     move_wrapper = []
                     move_wrapper.append((start_row, start_col, new_row, new_col, player))
                     moves.append(move_wrapper)
