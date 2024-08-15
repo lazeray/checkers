@@ -66,17 +66,14 @@ class Board:
                 )
 
     def move(self, start_row, start_col, end_row, end_col, player):
-        is_capture = False
         if move_is_jump(start_row, end_row):
             self.remove_checker(
                 *get_captured_checker_position(start_row, start_col, end_row, end_col)
             )  # remove piece
-            is_capture = True
         
         self.remove_checker(start_row, start_col)
         new_checker = self.generate_checker(end_row, end_col, player)
         self.add_new_checker(new_checker)
-        return is_capture
 
     def generate_checker(
         self, row, col, player
@@ -156,12 +153,8 @@ class Board:
             captured_checker_position = get_captured_checker_position(start_row, start_col, new_row, new_col)
             captured_checker = self.get_checker(*captured_checker_position)
             if checker == -1 and captured_checker != -1 and get_player_from_checker(captured_checker) != player:
-                # print("REACH!")
                 self.remove_checker(*captured_checker_position)
-                # print(self.get_jump_moves(self.generate_checker(new_row, new_col, player)))
-                # print("!!")
                 if self.get_jump_moves(self.generate_checker(new_row, new_col, player)) == []:
-                    # print("!!!!")
                     move_wrapper = []
                     move_wrapper.append((start_row, start_col, new_row, new_col, player))
                     moves.append(move_wrapper)

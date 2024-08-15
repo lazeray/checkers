@@ -8,13 +8,11 @@ curr_player = Board.Player.PLAYER1
 
 def AI_move(AI_player):
     moves = Checkers_AI.get_move(board, AI_player)
-    print(moves)
     for move in moves:
-        # print(move)
-        board.move(*move) # returns if AI_move captures a piece
+        board.move(*move)
 
 def human_move(start_row, start_col, end_row, end_col, human_player):
-    board.move(start_row, start_col, end_row, end_col, human_player) # returns if human_move captures a piece
+    board.move(start_row, start_col, end_row, end_col, human_player) 
 
 
 
