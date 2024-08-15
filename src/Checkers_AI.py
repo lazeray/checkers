@@ -5,14 +5,19 @@ import sys
 
 MINIMAX_DEPTH = 3
 
+
 def get_move(board, player):
-    return minimax(board, player, MINIMAX_DEPTH) # swap this line out for future algorithms
+    return minimax(
+        board, player, MINIMAX_DEPTH
+    )  # swap this line out for future algorithms
 
 
-def minimax_score(board): # tweak me in the future!
+def minimax_score(board):  # tweak me in the future!
     player1_pieces = len(board.player_one_pieces)
     player2_pieces = len(board.player_two_pieces)
-    return player1_pieces - player2_pieces # player 1 wants to maximize the score, player2 wants to minimize the score
+    return (
+        player1_pieces - player2_pieces
+    )  # player 1 wants to maximize the score, player2 wants to minimize the score
 
 
 def get_opposite_player(player):
@@ -21,14 +26,18 @@ def get_opposite_player(player):
     else:
         return Board.Player.PLAYER1
 
-def get_resulting_boardstate(board, moves): # this is bad for runtime. Maybe i should implement an undo function but that sounds really awful
+
+def get_resulting_boardstate(
+    board, moves
+):  # this is bad for runtime. Maybe i should implement an undo function but that sounds really awful
     board_copy = copy.deepcopy(board)
     for move in moves:
         board_copy.move(*move)
     return board_copy
 
-def minimax(board, player, depth): # TODO implement alpha-beta pruning
-    if depth == 0: # TODO think about what happens if the game finishes
+
+def minimax(board, player, depth):  # TODO implement alpha-beta pruning
+    if depth == 0:  # TODO think about what happens if the game finishes
         return minimax_score(board)
     avaliable_moves = board.get_all_moves(player)
     max_score = -sys.maxsize
@@ -50,9 +59,6 @@ def minimax(board, player, depth): # TODO implement alpha-beta pruning
         return max_moves
     if player == Board.Player.PLAYER2:
         return min_moves
-
-
-
 
 
 def random_generator(board, player):
