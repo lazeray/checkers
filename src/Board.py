@@ -101,6 +101,7 @@ class Board:
         for i in range(COLS):
             print(i, end=" ")
         print()
+        print()
 
     def get_checker(self, row, col):
         for checker in self.player_one_pieces:

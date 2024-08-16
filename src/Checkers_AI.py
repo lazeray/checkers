@@ -46,7 +46,6 @@ def get_resulting_boardstate( # perhaps i should implement this inside the Board
     board, moves
 ):  # this is bad for runtime. Maybe i should implement an undo function but that sounds really awful
     board_copy = copy.deepcopy(board)
-    print(moves)
     for move in moves:
         board_copy.move(*move)
     return board_copy
