@@ -29,13 +29,11 @@ def get_captured_checker_position(start_row, start_col, end_row, end_col):
 def get_player_from_checker(checker):
     return checker[2]
 
-
 def get_opposite_player(player):
     if player == Player.PLAYER1:
         return Player.PLAYER2
     else:
         return Player.PLAYER1
-
 
 class Board:
 
@@ -72,7 +70,7 @@ class Board:
             self.remove_checker(
                 *get_captured_checker_position(start_row, start_col, end_row, end_col)
             )  # remove piece
-
+        
         self.remove_checker(start_row, start_col)
         new_checker = self.generate_checker(end_row, end_col, player)
         self.add_new_checker(new_checker)
@@ -126,7 +124,7 @@ class Board:
 
     def get_available_moves(self, checker):
         return self.get_regular_moves(checker) + self.get_jump_moves(checker)
-
+        
     def get_jump_moves(self, checker):
         start_row = checker[0]
         start_col = checker[1]
@@ -143,7 +141,7 @@ class Board:
             if player is Player.PLAYER2:
                 row_change = [-2, -2]
                 col_change = [-2, 2]
-
+    
         moves = []
         for i in range(len(row_change)):
             new_row = start_row + row_change[i]
@@ -152,41 +150,24 @@ class Board:
                 continue
             checker = self.get_checker(new_row, new_col)
 
-            captured_checker_position = get_captured_checker_position(
-                start_row, start_col, new_row, new_col
-            )
+            captured_checker_position = get_captured_checker_position(start_row, start_col, new_row, new_col)
             captured_checker = self.get_checker(*captured_checker_position)
-            if (
-                checker == -1
-                and captured_checker != -1
-                and get_player_from_checker(captured_checker) != player
-            ):
+            if checker == -1 and captured_checker != -1 and get_player_from_checker(captured_checker) != player:
                 self.remove_checker(*captured_checker_position)
-                if (
-                    self.get_jump_moves(self.generate_checker(new_row, new_col, player))
-                    == []
-                ):
+                if self.get_jump_moves(self.generate_checker(new_row, new_col, player)) == []:
                     move_wrapper = []
-                    move_wrapper.append(
-                        (start_row, start_col, new_row, new_col, player)
-                    )
+                    move_wrapper.append((start_row, start_col, new_row, new_col, player))
                     moves.append(move_wrapper)
                 else:
-                    for move in self.get_jump_moves(
-                        self.generate_checker(new_row, new_col, player)
-                    ):
+                    for move in self.get_jump_moves(self.generate_checker(new_row, new_col, player)):
                         move_wrapper = []
-                        move_wrapper.append(
-                            (start_row, start_col, new_row, new_col, player)
-                        )
-                        move_wrapper.append(move)
+                        move_wrapper.append((start_row, start_col, new_row, new_col, player))
+                        move_wrapper.extend(move)
                         moves.append(move_wrapper)
-                self.add_new_checker(
-                    self.generate_checker(
-                        *captured_checker_position, get_opposite_player(player)
-                    )
-                )
+                self.add_new_checker(self.generate_checker(*captured_checker_position, get_opposite_player(player)))
         return moves
+
+
 
     def get_regular_moves(self, checker):
         start_row = checker[0]
@@ -204,7 +185,7 @@ class Board:
             if player is Player.PLAYER2:
                 row_change = [-1, -1]
                 col_change = [-1, 1]
-
+        
         moves = []
         for i in range(len(row_change)):
             new_row = start_row + row_change[i]
@@ -223,11 +204,7 @@ class Board:
     def get_all_moves(self, player):
         all_moves = []
         if player == Player.PLAYER1:
-            for (
-                checker
-            ) in (
-                self.player_one_pieces
-            ):  # there might be a cleaner pythonized version of doing this but idk
+            for checker in self.player_one_pieces: # there might be a cleaner pythonized version of doing this but idk
                 for move in self.get_available_moves(checker):
                     all_moves.append(move)
         elif player == Player.PLAYER2:
