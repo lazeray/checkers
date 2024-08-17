@@ -8,7 +8,7 @@ MINIMAX_DEPTH = 3
 
 def get_move(board, player):
     return minimax(
-        board, player, MINIMAX_DEPTH
+        board, player, MINIMAX_DEPTH, -sys.maxsize, sys.maxsize
     )[1]  # swap this line out for future algorithms
 
 
@@ -38,9 +38,9 @@ def has_lost(board, player):
 
 def get_loss_score(player):
     if player == Board.Player.PLAYER1:
-        return sys.maxsize
-    if player == Board.Player.PLAYER2:
         return -sys.maxsize
+    if player == Board.Player.PLAYER2:
+        return +sys.maxsize
 
 def get_resulting_boardstate( # perhaps i should implement this inside the Board.py class
     board, moves
@@ -51,7 +51,7 @@ def get_resulting_boardstate( # perhaps i should implement this inside the Board
     return board_copy
 
 
-def minimax(board, player, depth):  # TODO implement alpha-beta pruning
+def minimax(board, player, depth, white_best_val, black_best_val):  # TODO implement alpha-beta pruning
     if has_lost(board, player):
         return get_loss_score(player), None
     if depth == 0:
@@ -62,10 +62,19 @@ def minimax(board, player, depth):  # TODO implement alpha-beta pruning
     max_moves = -1
     min_moves = -1
 
+        
+
     for moves in avaliable_moves:
         next_player = get_opposite_player(player)
         next_board = get_resulting_boardstate(board, moves)
-        next_score = minimax(next_board, next_player, depth - 1)[0]
+        next_score = minimax(next_board, next_player, depth - 1, max_score, min_score)[0]
+        if player == Board.Player.PLAYER1: # pruning section
+            if black_best_val < next_score:
+                return next_score, None
+        if player == Board.Player.PLAYER2:
+            if white_best_val > next_score:
+                return next_score, None
+
         if next_score > max_score:
             max_score = next_score
             max_moves = moves
