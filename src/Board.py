@@ -202,6 +202,11 @@ class Board:
                 )  # move => start_x, start_y, end_x, end_y, Player
         return moves
 
+    def print_all_moves(self, all_moves):
+        for index, move in enumerate(all_moves):
+            print(f"{index}: {move}")
+
+
     def get_all_moves(self, player):
         all_moves = []
         if player == Player.PLAYER1:
