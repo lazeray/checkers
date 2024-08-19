@@ -70,15 +70,15 @@ class Board:
             self.remove_checker(
                 *get_captured_checker_position(start_row, start_col, end_row, end_col)
             )  # remove piece
-        
+        original_checker = self.get_checker(start_row, start_col)
         self.remove_checker(start_row, start_col)
-        new_checker = self.generate_checker(end_row, end_col, player)
+        new_checker = self.generate_checker(end_row, end_col, player, original_checker[3])
         self.add_new_checker(new_checker)
 
     def generate_checker(
-        self, row, col, player
+        self, row, col, player, former_piece
     ):  # checker structure ==> (x, y, Player, Piece)
-        if row == 0 or row == ROWS - 1:
+        if row == 0 or row == ROWS - 1 or former_piece == Piece.KING:
             return row, col, player, Piece.KING
         else:
             return row, col, player, Piece.BASIC
@@ -135,11 +135,11 @@ class Board:
         row_change = [2, -2, 2, -2]
         col_change = [2, 2, -2, -2]
 
-        if piece is Piece.BASIC:
-            if player is Player.PLAYER1:
+        if piece == Piece.BASIC:
+            if player == Player.PLAYER1:
                 row_change = [2, 2]
                 col_change = [-2, 2]
-            if player is Player.PLAYER2:
+            if player == Player.PLAYER2:
                 row_change = [-2, -2]
                 col_change = [-2, 2]
     
@@ -155,17 +155,18 @@ class Board:
             captured_checker = self.get_checker(*captured_checker_position)
             if checker == -1 and captured_checker != -1 and get_player_from_checker(captured_checker) != player:
                 self.remove_checker(*captured_checker_position)
-                if self.get_jump_moves(self.generate_checker(new_row, new_col, player)) == []:
+                future_moves = self.get_jump_moves(self.generate_checker(new_row, new_col, player, piece))
+                if future_moves == []:
                     move_wrapper = []
                     move_wrapper.append((start_row, start_col, new_row, new_col, player))
                     moves.append(move_wrapper)
                 else:
-                    for move in self.get_jump_moves(self.generate_checker(new_row, new_col, player)):
+                    for move in future_moves:
                         move_wrapper = []
                         move_wrapper.append((start_row, start_col, new_row, new_col, player))
                         move_wrapper.extend(move)
                         moves.append(move_wrapper)
-                self.add_new_checker(self.generate_checker(*captured_checker_position, get_opposite_player(player)))
+                self.add_new_checker(captured_checker)
         return moves
 
 
@@ -179,11 +180,11 @@ class Board:
         row_change = [1, -1, 1, -1]
         col_change = [1, -1, -1, 1]
 
-        if piece is Piece.BASIC:
-            if player is Player.PLAYER1:
+        if piece == Piece.BASIC:
+            if player == Player.PLAYER1:
                 row_change = [1, 1]
                 col_change = [-1, 1]
-            if player is Player.PLAYER2:
+            if player == Player.PLAYER2:
                 row_change = [-1, -1]
                 col_change = [-1, 1]
         
@@ -228,8 +229,20 @@ class Board:
             elif piece == Piece.KING:
                 board[checker[0]][checker[1]] = "A"
         for checker in self.player_two_pieces:
+            piece = checker[3]
             if piece == Piece.BASIC:
                 board[checker[0]][checker[1]] = "b"
             elif piece == Piece.KING:
                 board[checker[0]][checker[1]] = "B"
         return board
+
+    def has_lost(self, player):
+        if player == Player.PLAYER1 and len(self.player_one_pieces) == 0:
+            return True
+        if player == Player.PLAYER2 and len(self.player_two_pieces) == 0:
+            return True
+        if self.get_all_moves(player) == []:
+            return True
+        return False
+    
+    

@@ -9,8 +9,7 @@ MINIMAX_DEPTH = 3
 def get_move(board, player):
     return minimax(
         board, player, MINIMAX_DEPTH, -sys.maxsize, sys.maxsize
-    )[1]  # swap this line out for future algorithms
-
+    )[1]  # swap this out for future algorithms
 
 def minimax_score(board):  # tweak me in the future!
     player1_pieces = len(board.player_one_pieces)
@@ -27,14 +26,6 @@ def get_opposite_player(player):
         return Board.Player.PLAYER1
 
 
-def has_lost(board, player):
-    if player == Board.Player.PLAYER1 and len(board.player_one_pieces) == 0:
-        return True
-    if player == Board.Player.PLAYER2 and len(board.player_two_pieces) == 0:
-        return True
-    if board.get_all_moves(player) == []:
-        return True
-    return False
 
 def get_loss_score(player):
     if player == Board.Player.PLAYER1:
@@ -51,8 +42,8 @@ def get_resulting_boardstate( # perhaps i should implement this inside the Board
     return board_copy
 
 
-def minimax(board, player, depth, white_best_val, black_best_val):  # TODO implement alpha-beta pruning
-    if has_lost(board, player):
+def minimax(board, player, depth, white_best_val, black_best_val): 
+    if board.has_lost(player):
         return get_loss_score(player), None
     if depth == 0:
         return minimax_score(board), None

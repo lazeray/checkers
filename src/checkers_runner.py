@@ -20,10 +20,15 @@ def human_move(moves):
 
 while True:
     board.print_board()
-    if curr_player is AI_player:
+    if board.has_lost(curr_player):
+        print(f"{curr_player}  has lost!")
+        break
+
+    if curr_player == AI_player:
         AI_move(AI_player)
         curr_player = human_player
-    elif curr_player is human_player:
+
+    elif curr_player == human_player:
         all_moves = board.get_all_moves(human_player)
         board.print_all_moves(all_moves)
         
