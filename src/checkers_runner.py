@@ -1,7 +1,7 @@
-import Board
+
 import bitboard
-import Checkers_AI
 import bitboard_AI
+
 
 human_player = bitboard.Player.PLAYER1  # can modify this
 AI_player = bitboard.Player.PLAYER2  # can modify this
@@ -18,6 +18,7 @@ def AI_move(AI_player):
 def human_move(moves):
     for move in moves:
         board.move(*move)
+
 
 while True:
     board.print_board()

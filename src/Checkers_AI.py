@@ -3,7 +3,7 @@ import random
 import copy
 import sys
 
-MINIMAX_DEPTH = 3
+MINIMAX_DEPTH = 6
 
 
 def get_move(board, player):

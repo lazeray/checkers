@@ -148,8 +148,8 @@ class bitboard:
         return capture_informations
     
     def undo_moves(self, moves, capture_informations):
-        for move_index in range(len(moves)):
-            self.undo(*moves[move_index], *capture_informations[move_index])
+        for move, capture_info in zip(reversed(moves), reversed(capture_informations)):
+            self.undo(*move, *capture_info)
 
     def get_available_moves(self, row, col):
         return self.get_regular_moves(row, col) + self.get_jump_moves(row,col)
@@ -254,12 +254,3 @@ class bitboard:
         if self.get_all_moves(player) == []:
             return True
         return False
-
-myboard = bitboard()
-myboard.print_board()
-myboard.move(5, 0, 4, 1, Player.PLAYER2)
-myboard.move(2, 1, 3, 2, Player.PLAYER1)
-myboard.move(3, 2, 5, 0, Player.PLAYER1)
-myboard.print_board()
-all_moves = myboard.get_all_moves(Player.PLAYER1)
-myboard.print_all_moves(all_moves)
