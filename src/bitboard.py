@@ -92,9 +92,7 @@ class bitboard:
     def move(self, start_row, start_col, end_row, end_col, player):
         original_is_king = False
         captured_is_king = False
-        
         working_bitboard = self.get_bitboard(player)
-        print(working_bitboard)
         opposite_bitboard = self.get_bitboard(get_opposite_player(player))
         if move_is_jump(start_row, end_row):
             opposite_bitboard = del_bit(opposite_bitboard, *get_captured_checker_position(start_row, start_col, end_row, end_col))
@@ -159,7 +157,6 @@ class bitboard:
     def get_jump_moves(self, row, col):
         is_king = (get_bit(self.king_pieces, row, col) == 1)
         player = self.get_player(row, col)
-        
         row_change = [2, -2, 2, -2]
         col_change = [2, -2, -2, 2]
         if not is_king:
@@ -177,7 +174,7 @@ class bitboard:
             if not is_in_bounds(new_row, new_col):
                 continue
             captured_checker_position = get_captured_checker_position(row, col, new_row, new_col)
-            if self.get_player(new_row, new_col) == -1 and self.get_player(*captured_checker_position) != player:
+            if self.get_player(new_row, new_col) == -1 and self.get_player(*captured_checker_position) == get_opposite_player(player):
                 capture_information = self.move(row, col, new_row, new_col, player)
                 future_moves = self.get_jump_moves(new_row, new_col)
                 if future_moves == []:
@@ -237,9 +234,10 @@ class bitboard:
         
         for row in range(ROWS):
             for col in range(COLS):
-                for move in self.get_available_moves(row, col):
-                    if get_bit(working_bitboard, row, col) == 1: # ditto
-                        all_moves.append(move)
+                if get_bit(working_bitboard, row, col) == 1: # ditto
+                        for move in self.get_available_moves(row, col):
+                            all_moves.append(move)
+                    
 
         return all_moves
     

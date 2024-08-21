@@ -24,16 +24,17 @@ while True:
     if board.has_lost(curr_player):
         print(f"{curr_player}  has lost!")
         break
-
+    
     if curr_player == AI_player:
+        print(curr_player)
         AI_move(AI_player)
         curr_player = human_player
+
 
     elif curr_player == human_player:
         all_moves = board.get_all_moves(human_player)
         board.print_all_moves(all_moves)
         
         move_index = int(input("Enter the move index: ")) # arguably not brilliant, but it works
-
         human_move(all_moves[move_index])
         curr_player = AI_player
